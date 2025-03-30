@@ -1,12 +1,14 @@
+
+	
 	<div class="scrollbar-inner sidebar-wrapper">
 					<div class="user">
 						<div class="photo">
-							<img src="assets/img/profile.jpg">
+							<img src="<?= htmlspecialchars($_SESSION['profile']) ?>" alt="Profile Picture">
 						</div>
 						<div class="info">
 							<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									Tola
+									<?php echo $_SESSION['username']; ?>
 									<span class="user-level">Administrator</span>
 									<span class="caret"></span>
 								</span>
