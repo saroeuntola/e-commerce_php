@@ -6,11 +6,11 @@ function protectPathAccess() {
     
     if ($auth->is_logged_in()) {
         if ($_SESSION['role_id'] != 1) {
-            header('Location: ../include/no_access.php');
+            header('Location: /ministore/admin/page/include/no_access.php');
             exit;
         }
     } else {
-        header('Location: /MiniStore/include/login.php');
+        header('Location: /ministore/include/login.php');
         exit;
     }
 }

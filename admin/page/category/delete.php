@@ -1,6 +1,7 @@
 <?php
 include('../library/category_lib.php');
-include('../library/db.php');
+include('../library/checkroles.php');
+protectPathAccess();
 $category = new Category();
 
 if (isset($_GET['id'])) {

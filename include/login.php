@@ -7,14 +7,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
     $remember = isset($_POST['remember']) ? true : false;
 
-    // Attempt login
     if ($auth->login($username, $password, $remember)) {
-        // Get user role_id after successful login
         $result = dbSelect('users', 'role_id', "username='$username'");
         if ($result && mysqli_num_rows($result) > 0) {
             $user = mysqli_fetch_assoc($result);
             if ($user['role_id'] == 1) {
-                header('Location: ../admin/dashboard.php');
+                header('Location: ../admin/index.php');
                 exit();
             } 
             if ($user['role_id'] == 2) {

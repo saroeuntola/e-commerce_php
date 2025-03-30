@@ -29,7 +29,7 @@
                 <div class="col-lg-3">
                     <div class="header__right">
                         <div class="header__right__auth">
-                            <a href="include/register.php">Login</a>
+                            <a href="include/login.php">Login</a>
                             <a href="#">Register</a>
                         </div>
                         <ul class="header__right__widget">

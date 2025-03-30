@@ -36,21 +36,21 @@
 					</div>
 					<ul class="nav">
 						<li class="nav-item active">
-							<a href="./admin/dashboard.php">
+							<a href="/ministore/admin/index.php">
 								<i class="la la-dashboard"></i>
 								<p>Dashboard</p>
 								<span class="badge badge-count">5</span>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="#">
+							<a href="/ministore/admin/page/product/index.php">
 								<i class="la la-table"></i>
 								<p>Products</p>
 								<span class="badge badge-count">14</span>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="./page/category/index.php">
+							<a href="/ministore/admin/page/category/index.php">
 								<i class="la la-keyboard-o"></i>
 								<p>Cagetogy</p>
 								<span class="badge badge-count">50</span>
