@@ -7,8 +7,8 @@
         $username = "root";
         $password = "";
         $db = "storeDB";
-
-        $conn = new mysqli ($servername, $username, $password,$db);
+		$port = 3308;
+        $conn = new mysqli ($servername, $username, $password,$db,$port);
         if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
         }

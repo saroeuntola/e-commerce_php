@@ -3,7 +3,7 @@
 	<div class="scrollbar-inner sidebar-wrapper">
 					<div class="user">
 						<div class="photo">
-							<img src="<?= htmlspecialchars($_SESSION['profile']) ?>" alt="Profile Picture">
+							
 						</div>
 						<div class="info">
 							<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
