@@ -1,7 +1,7 @@
 <?php
 class Category
 {
-    private $db;
+    public $db;
 
     public function __construct()
     {
@@ -11,63 +11,53 @@ class Category
     // CREATE a new category
     public function createCategory($name)
     {
+        $quotedName = $this->db->quote($name);
+        $result = dbSelect('categories', 'id', "name=$quotedName");
 
-        $result = dbSelect('categories', 'id', "name='$name'");
-        if ($result && mysqli_num_rows($result) > 0) {
-            return false; 
+        if ($result && count($result) > 0) {
+            return false; // Category already exists
         }
-        $data = [
-            'name' => $name
-        ];
 
+        $data = ['name' => $name];
         return dbInsert('categories', $data);
     }
 
     // READ all categories
     public function getCategories()
     {
-        $result = dbSelect('categories', '*');
-        return $result;
+        return dbSelect('categories', '*');
     }
 
     // READ a specific category by ID
     public function getCategory($id)
     {
-        $result = dbSelect('categories', '*', "id=$id");
-        if ($result && mysqli_num_rows($result) > 0) {
-            return mysqli_fetch_assoc($result);
-        }
-        return null;
+        $quotedId = $this->db->quote($id);
+        $result = dbSelect('categories', '*', "id=$quotedId");
+
+        return ($result && count($result) > 0) ? $result[0] : null;
     }
 
     // UPDATE a category
     public function updateCategory($id, $newName)
     {
-        // Check if the category exists
         $category = $this->getCategory($id);
         if (!$category) {
             return false; // Category doesn't exist
         }
 
-        // Update the category
-        $data = [
-            'name' => $newName
-        ];
-
-        return dbUpdate('categories', $data, "id=$id");
+        $data = ['name' => $newName];
+        return dbUpdate('categories', $data, "id=" . $this->db->quote($id));
     }
 
     // DELETE a category
     public function deleteCategory($id)
     {
-        // Check if the category exists
         $category = $this->getCategory($id);
         if (!$category) {
             return false; // Category doesn't exist
         }
 
-        // Delete the category
-        return dbDelete('categories', "id=$id");
+        return dbDelete('categories', "id=" . $this->db->quote($id));
     }
 }
 ?>

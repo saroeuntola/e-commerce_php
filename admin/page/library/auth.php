@@ -4,7 +4,7 @@ include('db.php');
 
 class Auth
 {
-    private $db;
+    public $db;
 
     public function __construct()
     {
@@ -12,14 +12,14 @@ class Auth
     }
 
     // Register
-    public function register($username, $email, $password,$sex, $role_id = 1) 
+    public function register($username, $email, $password, $sex, $role_id = 1) 
     {
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
         $data = [
             'username' => $username,
             'email' => $email,
             'password' => $hashed_password,
-            'sex'=> $sex,
+            'sex' => $sex,
             'role_id' => $role_id 
         ];
 
@@ -30,23 +30,26 @@ class Auth
     public function login($username, $password, $remember = false)
     {
         // Get user 
-        $result = dbSelect('users', 'id, username, password, role_id', "username='$username'");
-        if ($result && mysqli_num_rows($result) > 0) {
-            $user = mysqli_fetch_assoc($result);
-            if (password_verify($password, $user['password'])) {
+        $results = dbSelect('users', 'id, username, password, role_id', "username = " . $this->db->quote($username) . " LIMIT 1");
 
+        if ($results && count($results) > 0) {
+            $user = $results[0];
+
+            if (password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role_id'] = $user['role_id'];
 
                 if ($remember) {
                     $token = bin2hex(random_bytes(32));
-                    $expiry = time() + (86400 * 30);  // 30 days expiry
+                    $expiry = time() + (86400 * 30);  // 30 days
+
                     dbInsert('user_tokens', [
                         'user_id' => $user['id'],
                         'token' => hash('sha256', $token),
                         'expires_at' => date('Y-m-d H:i:s', $expiry)
                     ]);
+
                     setcookie("remember_token", $token, $expiry, "/", "", true, true);
                 }
 
@@ -64,16 +67,16 @@ class Auth
             return true;
         } elseif (isset($_COOKIE['remember_token'])) {
             $token = hash('sha256', $_COOKIE['remember_token']);
-            $result = dbSelect('user_tokens', 'user_id', "token='$token' AND expires_at > NOW() LIMIT 1");
-            if ($result && mysqli_num_rows($result) > 0) {
-                $user = mysqli_fetch_assoc($result);
+            $results = dbSelect('user_tokens', 'user_id', "token = " . $this->db->quote($token) . " AND expires_at > NOW() LIMIT 1");
+
+            if ($results && count($results) > 0) {
+                $user = $results[0];
                 $_SESSION['user_id'] = $user['user_id'];
 
-                // Retrieve the user's role from the database and store it in the session
-                $userRoleResult = dbSelect('users', 'role_id', "id=" . $user['user_id']);
-                if ($userRoleResult && mysqli_num_rows($userRoleResult) > 0) {
-                    $userRole = mysqli_fetch_assoc($userRoleResult);
-                    $_SESSION['role_id'] = $userRole['role_id'];
+                // Fetch role_id
+                $roleResults = dbSelect('users', 'role_id', "id = " . $this->db->quote($user['user_id']));
+                if ($roleResults && count($roleResults) > 0) {
+                    $_SESSION['role_id'] = $roleResults[0]['role_id'];
                 }
 
                 return true;
@@ -87,9 +90,10 @@ class Auth
     public function logout()
     {
         session_destroy();
+
         if (isset($_COOKIE['remember_token'])) {
             $token = hash('sha256', $_COOKIE['remember_token']);
-            dbDelete('user_tokens', "token='$token'");
+            dbDelete('user_tokens', "token = " . $this->db->quote($token));
             setcookie("remember_token", "", time() - 3600, "/", "", true, true);
         }
     }

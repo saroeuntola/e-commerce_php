@@ -62,24 +62,25 @@ $categories = $category->getCategories();
         </tr>
     </thead>
     <tbody>
-        <?php
-        if ($categories && mysqli_num_rows($categories) > 0) {
-            while ($categoryRow = mysqli_fetch_assoc($categories)) {
-                echo "<tr class='text-gray-600 hover:bg-gray-50 transition duration-150 ease-in-out'>";
-                echo "<td class='px-6 py-4 border-b'>{$categoryRow['id']}</td>";
-                echo "<td class='px-6 py-4 border-b'>{$categoryRow['name']}</td>";
-                echo "<td class='px-6 py-4 border-b'>{$categoryRow['created_at']}</td>";
+      <?php
+if ($categories && count($categories) > 0) {
+    foreach ($categories as $categoryRow) {
+        echo "<tr class='text-gray-600 hover:bg-gray-50 transition duration-150 ease-in-out'>";
+        echo "<td class='px-6 py-4 border-b'>{$categoryRow['id']}</td>";
+        echo "<td class='px-6 py-4 border-b'>{$categoryRow['name']}</td>";
+        echo "<td class='px-6 py-4 border-b'>{$categoryRow['created_at']}</td>";
 
-                echo "<td class='px-6 py-4 border-b'>";
-                echo "<a href='edit.php?id={$categoryRow['id']}' class='text-white bg-blue-600 me-2 px-3 py-2 rounded-md text-sm'>Edit</a>";
-                echo "<a href='delete.php?id={$categoryRow['id']}' class='text-white bg-red-600 hover:text-red-800  px-3 py-2 rounded-md text-sm' onclick='return confirm(\"Are you sure you want to delete this category?\");'>Delete</a>";
-                echo "</td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='4' class='px-6 py-4 border-b text-center text-gray-500'>No categories found</td></tr>";
-        }
-        ?>
+        echo "<td class='px-6 py-4 border-b'>";
+        echo "<a href='edit.php?id={$categoryRow['id']}' class='text-white bg-blue-600 me-2 px-3 py-2 rounded-md text-sm'>Edit</a>";
+        echo "<a href='delete.php?id={$categoryRow['id']}' class='text-white bg-red-600 hover:text-red-800 px-3 py-2 rounded-md text-sm' onclick='return confirm(\"Are you sure you want to delete this category?\");'>Delete</a>";
+        echo "</td>";
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='4' class='px-6 py-4 border-b text-center text-gray-500'>No categories found</td></tr>";
+}
+?>
+
     </tbody>
         </table>
 

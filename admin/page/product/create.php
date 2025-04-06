@@ -78,10 +78,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Category</label>
                 <select name="category_id" required class="w-full px-3 py-2 border rounded-md">
+                    
                     <option value="">Select Category</option>
-                    <?php while ($row = mysqli_fetch_assoc($categories)) { ?>
-                        <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
-                    <?php } ?>
+                        <?php
+                        foreach ($categories as $categorys) {
+                            echo "<option value='{$categorys['id']}'>{$categorys['name']}</option>";
+                        }
+                        ?>   
+                   
                 </select>
             </div>
 

@@ -5,26 +5,27 @@ $auth = new Auth();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $remember = isset($_POST['remember']) ? true : false;
+    $remember = isset($_POST['remember']);
 
     if ($auth->login($username, $password, $remember)) {
-        $result = dbSelect('users', 'role_id', "username='$username'");
-        if ($result && mysqli_num_rows($result) > 0) {
-            $user = mysqli_fetch_assoc($result);
+        $result = dbSelect('users', 'role_id', "username=" . $auth->db->quote($username));
+
+        if ($result && count($result) > 0) {
+            $user = $result[0];
             if ($user['role_id'] == 1) {
                 header('Location: ../admin/index.php');
                 exit();
-            } 
-            if ($user['role_id'] == 2) {
+            } elseif ($user['role_id'] == 2) {
                 header('Location: ../index.php');
                 exit();
-            } 
+            }
         }
     } else {
         echo "<p class='text-red-500'>Invalid username or password!</p>";
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

@@ -13,7 +13,7 @@
 						</div>
 					</form>
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-						<li class="nav-item dropdown hidden-caret">
+						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="la la-envelope"></i>
 							</a>
@@ -24,6 +24,7 @@
 								<a class="dropdown-item" href="#">Something else here</a>
 							</div>
 						</li>
+
 						<li class="nav-item dropdown hidden-caret">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="la la-bell"></i>
@@ -80,6 +81,6 @@
 								</li>
 							</ul>
 						</li>
-						</ul>
-					</div>
+					</ul>
+				</div>
 			</nav>

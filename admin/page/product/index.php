@@ -72,29 +72,30 @@ $products = $product->getProducts();
                     </tr>
                 </thead>
                <tbody>
-    <?php if (!empty($products)): ?>
-        <?php foreach ($products as $row): ?>
-            <tr class="text-gray-700 hover:bg-gray-50 transition">
-                <td class="px-4 py-3 border-b">
-                    <img src="<?= htmlspecialchars($row['image']) ?>" alt="Product" class="h-12 w-12 object-cover rounded-md">
-                </td>
-                <td class="px-4 py-3 border-b"><?= htmlspecialchars($row['name']) ?></td>
-                <td class="px-4 py-3 border-b"><?= htmlspecialchars($row['description']) ?></td>
-                <td class="px-4 py-3 border-b">$<?= number_format($row['price'], 2) ?></td>
-                <td class="px-4 py-3 border-b"><?= (int)$row['stock'] ?></td>
-                <td class="px-4 py-3 border-b"><?= htmlspecialchars($row['name']) ?></td>
-                <td class="px-4 py-3 border-b"><?= date("Y-m-d", strtotime($row['created_at'])) ?></td>
-                <td class="px-4 py-3 border-b">
-                    <a href="edit.php?id=<?= $row['id'] ?>" class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 mr-2">Edit</a>
-                    <a href="delete.php?id=<?= $row['id'] ?>" class="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700" onclick="return confirm('Are you sure you want to delete this product?');">Delete</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr>
-            <td colspan="8" class="px-4 py-3 text-center text-gray-500">No products found</td>
+         <?php if (!empty($products)): ?>
+    <?php foreach ($products as $row): ?>
+        <tr class="text-gray-700 hover:bg-gray-50 transition">
+            <td class="px-4 py-3 border-b">
+                <img src="<?= htmlspecialchars($row['image']) ?>" alt="Product" class="h-12 w-12 object-cover rounded-md">
+            </td>
+            <td class="px-4 py-3 border-b"><?= htmlspecialchars($row['name']) ?></td>
+            <td class="px-4 py-3 border-b"><?= htmlspecialchars($row['description']) ?></td>
+            <td class="px-4 py-3 border-b">$<?= number_format($row['price'], 2) ?></td>
+            <td class="px-4 py-3 border-b"><?= (int)$row['stock'] ?></td>
+            <td class="px-4 py-3 border-b"><?= htmlspecialchars($row['name']) ?></td>
+            <td class="px-4 py-3 border-b"><?= date("Y-m-d", strtotime($row['created_at'])) ?></td>
+            <td class="px-4 py-3 border-b">
+                <a href="edit.php?id=<?= $row['id'] ?>" class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 mr-2">Edit</a>
+                <a href="delete.php?id=<?= $row['id'] ?>" class="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700" onclick="return confirm('Are you sure you want to delete this product?');">Delete</a>
+            </td>
         </tr>
-    <?php endif; ?>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="8" class="px-4 py-3 text-center text-gray-500">No products found</td>
+    </tr>
+<?php endif; ?>
+
 </tbody>
 
             </table>
