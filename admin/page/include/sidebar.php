@@ -66,7 +66,7 @@
 
     <!-- Banner Link -->
     <li class="nav-item <?php echo (strpos($_SERVER['REQUEST_URI'], 'banner') !== false) ? 'active' : ''; ?>">
-        <a href="#">
+        <a href="/ministore/admin/page/banner/index.php">
             <i class="la la-th"></i>
             <p>Banner</p>
             <span class="badge badge-count">6</span>
