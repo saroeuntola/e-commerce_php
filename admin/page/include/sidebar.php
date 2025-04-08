@@ -73,6 +73,15 @@
         </a>
     </li>
 
+    <!-- Brand Link -->
+    <li class="nav-item <?php echo (strpos($_SERVER['REQUEST_URI'], 'brand') !== false) ? 'active' : ''; ?>">
+        <a href="/ministore/admin/page/brand/index.php">
+            <i class="la la-th"></i>
+            <p>Brand</p>
+            <span class="badge badge-count">6</span>
+        </a>
+    </li>
+
     <!-- Users Link -->
     <li class="nav-item <?php echo (strpos($_SERVER['REQUEST_URI'], 'users') !== false) ? 'active' : ''; ?>">
         <a href="#">
