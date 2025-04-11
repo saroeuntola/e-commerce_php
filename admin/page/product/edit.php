@@ -66,13 +66,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" name="name" value="<?= htmlspecialchars($productData['name']) ?>" required
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
+        <!-- Product Image -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Product Image</label>
+            <?php if (!empty($productData['image'])): ?>
+                <img id="previewImage" src="<?= htmlspecialchars($productData['image']) ?>" alt="Current Product Image"
+                    class="h-20 w-20 object-cover rounded-md mb-3 border border-gray-300 shadow-sm">
+            <?php else: ?>
+                <img id="previewImage" src="https://via.placeholder.com/100" alt="Product Preview"
+                    class="h-20 w-20 object-cover rounded-md mb-3 border border-gray-300 shadow-sm">
+            <?php endif; ?>
+            <input type="file" name="image" onchange="previewProductImage(event)" 
+                class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm 
+                file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+        </div>
 
-            <!-- Product Image -->
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Product Image</label>
-                <img src="<?= htmlspecialchars($productData['image']) ?>" class="h-20 w-20 object-cover rounded-md">
-                <input type="file" name="image" class="mt-2">
-            </div>
+        <script>
+            function previewProductImage(event) {
+                const image = document.getElementById('previewImage');
+                const file = event.target.files[0];
+
+                if (file) {
+                    image.src = URL.createObjectURL(file);
+                }
+            }
+        </script>
 
             <!-- Description -->
             <div class="mb-4">

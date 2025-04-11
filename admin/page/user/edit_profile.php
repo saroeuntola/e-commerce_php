@@ -117,14 +117,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
      <script>
-    function previewProfileImage(event) {
-        const image = document.getElementById('previewImage');
-        const file = event.target.files[0];
+        function previewProfileImage(event) {
+            const image = document.getElementById('previewImage');
+            const file = event.target.files[0];
 
-        if (file) {
-            image.src = URL.createObjectURL(file); // This updates the src to the selected image
+            if (file) {
+                image.src = URL.createObjectURL(file); // This updates the src to the selected image
+            }
         }
-    }
     </script>
 </body>
 </html>

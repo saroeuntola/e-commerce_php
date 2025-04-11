@@ -53,8 +53,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <!-- Product Image -->
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Upload Image</label>
-                <input type="file" name="image" accept="image/*" class="w-full px-3 py-2 border rounded-md">
+                <?php if (!empty($productData['image'])): ?>
+                    <img id="previewImage" src="<?= htmlspecialchars($productData['image']) ?>" alt="Current Product Image"
+                        class="h-24 w-24 object-cover rounded-full mb-3 border border-gray-300 shadow-sm">
+                <?php else: ?>
+                    <img id="previewImage" src="https://via.placeholder.com/100" alt="Product Preview"
+                        class="h-24 w-24 object-cover rounded-full mb-3 border border-gray-300 shadow-sm">
+                <?php endif; ?>
+                <input type="file" name="image" accept="image/*" onchange="previewProductImage(event)"
+                    class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm 
+                    file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
             </div>
+
+            <script>
+                function previewProductImage(event) {
+                    const image = document.getElementById('previewImage');
+                    const file = event.target.files[0];
+
+                    if (file) {
+                        image.src = URL.createObjectURL(file);
+                    }
+                }
+            </script>
 
             <!-- Description -->
             <div class="mb-4">

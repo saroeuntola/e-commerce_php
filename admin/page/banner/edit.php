@@ -67,12 +67,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
 
-            <!-- Product Image -->
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Banner Image</label>
-                <img src="<?= htmlspecialchars($bannerData['image']) ?>" class="h-20 w-20 object-cover rounded-md">
-                <input type="file" name="image" class="mt-2">
-            </div>
+<!-- Product Image -->
+<div class="mb-4">
+    <label class="block text-sm font-medium text-gray-700">Banner Image</label>
+    <?php if (!empty($bannerData['image'])): ?>
+        <img id="bannerPreviewImage" src="<?= htmlspecialchars($bannerData['image']) ?>" alt="Current Banner Image"
+            class="h-20 w-20 object-cover rounded-md mb-3 border border-gray-300 shadow-sm">
+    <?php else: ?>
+        <img id="bannerPreviewImage" src="https://via.placeholder.com/100" alt="Banner Preview"
+            class="h-20 w-20 object-cover rounded-md mb-3 border border-gray-300 shadow-sm">
+    <?php endif; ?>
+    <input type="file" name="image" accept="image/*" onchange="previewBannerImage(event)"
+           class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm 
+           file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mt-2">
+</div>
+
+<script>
+    function previewBannerImage(event) {
+        const image = document.getElementById('bannerPreviewImage');
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                image.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 
             <!-- Description -->
             <div class="mb-4">
