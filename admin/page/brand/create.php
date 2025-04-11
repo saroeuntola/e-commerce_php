@@ -3,8 +3,7 @@ include('../library/brand_lib.php');
 include('../library/checkroles.php');
  protectPathAccess();
 $brand = new Brand();
-// $category = new Category();
-// $categories = $category->getCategories();
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $brandName = $_POST['brand_name'];

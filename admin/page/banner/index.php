@@ -1,5 +1,6 @@
 <?php
 include('../library/banner_lib.php');
+include('../library/users_lib.php');
 include('../library/checkroles.php');
 
 protectPathAccess();

@@ -1,24 +1,19 @@
 <?php
-include('../admin/page/library/auth.php');
-
+include('../library/auth.php');
+include('../library/users_lib.php');
 $userAuth = new Auth();
-
+$role = new User();
+$roles = $role -> getRoles();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-   
+
     $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
     $sex = $_POST['sex']; 
-    $role_id = $_POST['role_id'];  
-
-    if ($userAuth->register($username, $email, $password, $sex, $role_id)) {
-        echo "Registration successful!";
-        header("Location: login.php");
-        exit;
-    } else {
-        echo "Error occurred during registration.";
-    }
+    $role_id = $_POST['role'];  
+    $userAuth->register($username, $email, $password, $sex, $role_id);
 }
+
 ?>
 
 
@@ -36,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
 
         <!-- Registration Form -->
-        <form action="register.php" method="POST">
+        <form action="create.php" method="POST">
             <!-- Username -->
             <div class="mb-4">
                 <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
@@ -70,12 +65,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             </div>
 
-<div class="mb-4" hidden>
-    <select id="role" name="role_id" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-        <option value="2">User</option>
-       
+            <div class="mb-4">
+    <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+    <select id="role" name="role" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        <option value="">Select Role</option>
+        <?php foreach ($roles as $r): ?>
+            <option value="<?= $r['id'] ?>"><?= htmlspecialchars($r['name']) ?></option>
+        <?php endforeach; ?>
     </select>
 </div>
+
+
             <!-- Submit Button -->
             <div class="flex items-center justify-center">
                 <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">

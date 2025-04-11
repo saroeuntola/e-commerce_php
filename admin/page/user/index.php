@@ -1,11 +1,10 @@
 <?php
 
-include('../library/category_lib.php');
-include('../library/checkroles.php');
 include('../library/users_lib.php');
-$category = new Category();
+include('../library/checkroles.php');
+$user = new User();
 protectPathAccess();
-$categories = $category->getCategories();
+$users = $user -> getUsers();
 
 
 ?>
@@ -51,39 +50,45 @@ $categories = $category->getCategories();
 <!-- page content  -->
         <div class="main-panel" id="content">
            <div class="mt-5">
-        <h2 class="text-2xl font-bold mb-6">Categories List</h2>
-        <a href="create.php" class='text-white bg-blue-600 px-3 py-2 rounded-md '>Create</a>
-    <table class="min-w-full bg-white border border-gray-200 rounded-lg mt-3 shadow-md">
+        <h2 class="text-2xl font-bold mb-6">User List</h2>
+        <a href="create.php" class='text-white bg-blue-600 px-3 py-2 rounded-md '>Create User</a>
+ <table class="min-w-full bg-white border border-gray-200 rounded-lg mt-3 shadow-md">
     <thead>
         <tr class="text-left text-sm font-medium text-gray-600 bg-gray-50">
             <th class="px-6 py-4 border-b">ID</th>
-            <th class="px-6 py-4 border-b">Category Name</th>
-            <th class="px-6 py-4 border-b">Created At</th>
+            <th class="px-6 py-4 border-b">Username</th>
+            <th class="px-6 py-4 border-b">Email</th>
+            <th class="px-6 py-4 border-b">Role</th>
             <th class="px-6 py-4 border-b">Actions</th>
         </tr>
     </thead>
     <tbody>
-      <?php
-if ($categories && count($categories) > 0) {
-    foreach ($categories as $categoryRow) {
-        echo "<tr class='text-gray-600 hover:bg-gray-50 transition duration-150 ease-in-out'>";
-        echo "<td class='px-6 py-4 border-b'>{$categoryRow['id']}</td>";
-        echo "<td class='px-6 py-4 border-b'>{$categoryRow['name']}</td>";
-        echo "<td class='px-6 py-4 border-b'>{$categoryRow['created_at']}</td>";
+        <?php
+        if ($users && count($users) > 0) {
+            foreach ($users as $userRow) {
+                echo "<tr class='text-gray-600 hover:bg-gray-50 transition duration-150 ease-in-out'>";
+                echo "<td class='px-6 py-4 border-b'>{$userRow['id']}</td>";
+                echo "<td class='px-6 py-4 border-b'>{$userRow['username']}</td>";
+                echo "<td class='px-6 py-4 border-b'>{$userRow['email']}</td>";
+                echo "<td class='px-6 py-4 border-b'>
+    <span class='bg-blue-600 text-white text-sm px-3 py-1 rounded-full shadow-sm'>
+        {$userRow['name']}
+    </span>
+</td>";
 
-        echo "<td class='px-6 py-4 border-b'>";
-        echo "<a href='edit.php?id={$categoryRow['id']}' class='text-white bg-blue-600 me-2 px-3 py-2 rounded-md text-sm'>Edit</a>";
-        echo "<a href='delete.php?id={$categoryRow['id']}' class='text-white bg-red-600 hover:text-red-800 px-3 py-2 rounded-md text-sm' onclick='return confirm(\"Are you sure you want to delete this category?\");'>Delete</a>";
-        echo "</td>";
-        echo "</tr>";
-    }
-} else {
-    echo "<tr><td colspan='4' class='px-6 py-4 border-b text-center text-gray-500'>No categories found</td></tr>";
-}
-?>
-
+                echo "<td class='px-6 py-4 border-b'>";
+                echo "<a href='edit.php?id={$userRow['id']}' class='text-white bg-blue-500 me-2 px-3 py-2 rounded-md text-sm'>Edit</a>";
+                echo "<a href='delete.php?id={$userRow['id']}' class='text-white bg-red-500 hover:text-red-800 px-3 py-2 rounded-md text-sm' onclick='return confirm(\"Are you sure you want to delete this user?\");'>Delete</a>";
+                echo "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='6' class='px-6 py-4 border-b text-center text-gray-500'>No users found</td></tr>";
+        }
+        ?>
     </tbody>
-        </table>
+</table>
+
 
     </div>
 

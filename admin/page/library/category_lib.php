@@ -15,7 +15,7 @@ class Category
         $result = dbSelect('categories', 'id', "name=$quotedName");
 
         if ($result && count($result) > 0) {
-            return false; // Category already exists
+            return false; 
         }
 
         $data = ['name' => $name];

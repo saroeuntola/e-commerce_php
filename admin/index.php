@@ -1,5 +1,7 @@
     <?php 
     include "../admin/page/library/checkroles.php";
+	include('../admin/page/library/users_lib.php');
+
       protectPathAccess();
     
 $categoryCount = dbCount("categories");
@@ -9,8 +11,8 @@ $userCount = dbCount("users");
 
 <!DOCTYPE html>
 <html>
-    
-<?php include "./page/include/head.php"; ?>
+     <?php include "./page/include/head.php"; ?>
+      
 
 <body>
     <div class="wrapper">
@@ -32,8 +34,8 @@ $userCount = dbCount("users");
 
         <!-- sidebar -->
         <div class="sidebar">
-            <!-- Corrected path for sidebar.php -->
-            <?php include "./page/include/sidebar.php"; ?>
+			   <?php include "./page/include/sidebar.php"; ?>
+
         </div>
 
         <div class="main-panel" id="content">

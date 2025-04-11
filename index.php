@@ -8,7 +8,7 @@
     <div id="preloder">
         <div class="loader"></div>
     </div>
-
+    
     <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
     <?php include "./include/offcanvas_menu.php" ?>

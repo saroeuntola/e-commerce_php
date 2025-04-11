@@ -1,10 +1,12 @@
 <?php
 include('../library/product_lib.php');
+include('../library/users_lib.php');
 include('../library/checkroles.php');
 
 protectPathAccess();
 $product = new Product();
 $products = $product->getProducts();
+
 ?>
 
 
