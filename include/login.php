@@ -69,6 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </button>
             </div>
 
+            <a href="register.php" class="text-center mt-3">Create Account</a>
+
             <!-- Error message -->
             <?php if (isset($error_message)): ?>
                 <div class="mt-4 text-center text-red-500">

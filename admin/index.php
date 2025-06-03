@@ -508,50 +508,6 @@ $userCount = dbCount("users");
 						</div>
 					</div>
 				</div>
-                <div class="container-fluid">
-                    <h4 class="page-title">Dashboard</h4>
-                    <div class="row">
-                        <!-- Users Count Card -->
-                        <div class="col-md-3">
-                            <div class="card card-stats card-warning">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <div class="icon-big text-center">
-                                                <i class="la la-users"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-7 d-flex align-items-center">
-                                            <div class="numbers">
-                                                <p class="card-category">Users</p>
-                                                <h4 class="card-title"><?php echo $categoryCount; ?></h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Categories Count Card -->
-                        <div class="col-md-3">
-                            <div class="card card-stats card-success">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <div class="icon-big text-center">
-                                                <i class="la la-tags"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-7 d-flex align-items-center">
-                                            <div class="numbers">
-                                                <p class="card-category">Categories</p>
-                                                <h4 class="card-title"><?php echo $productCount; ?></h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
         </div>
     </div>
 </div>
