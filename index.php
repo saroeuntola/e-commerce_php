@@ -11,7 +11,6 @@
 <body class="bg-gray-100">
     <?php include 'navbar.php' ?>
 
-     <!-- home page  -->
     <?php include 'home.php'; ?>
 
     <?php include 'footer.php'; ?>

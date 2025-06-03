@@ -85,6 +85,8 @@ function updateCartQuietly(event, index, action) {
     window.location.reload();
   });
 }
+
+
 </script>
 </body>
 </html>
