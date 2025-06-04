@@ -1,3 +1,6 @@
+<?php 
+include('./admin/page/library/db.php');
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

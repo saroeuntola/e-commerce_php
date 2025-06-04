@@ -1,4 +1,5 @@
 <?php 
+
   include "./admin/page/library/product_lib.php";
   include "./admin/page/library/db.php";
 
@@ -23,43 +24,105 @@
   <title><?= htmlspecialchars($product['name']) ?> | Product Detail</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-50 text-gray-800">
-<?php include 'navbar.php' ?>
-  <main class="container mx-auto px-4 py-12">
-    <div class="grid md:grid-cols-2 gap-10 items-start">
-      
-      <!-- Product Image -->
-      <div class="w-full overflow-hidden rounded-2xl shadow">
-        <?php if (!empty($product['image'])): ?>
-          <img src="<?= '/ministore/admin/page/product/product_image/' . htmlspecialchars($product['image']) ?>" 
-               alt="<?= htmlspecialchars($product['name']) ?>" 
-               class="w-full h-[400px] object-cover">
-        <?php else: ?>
-          <div class="w-full h-[400px] bg-gray-200 flex items-center justify-center text-gray-400">
-            No Image
-          </div>
-        <?php endif; ?>
-      </div>
 
-      <!-- Product Info -->
-      <div>
-        <h1 class="text-3xl font-bold mb-3"><?= htmlspecialchars($product['name']) ?></h1>
-        <p class="text-gray-500 text-sm mb-2">Category: <span class="capitalize"><?= htmlspecialchars($product['category_name']) ?></span></p>
-        <p class="text-blue-600 text-2xl font-semibold mb-4">$<?= htmlspecialchars(number_format($product['price'], 2)) ?></p>
-        
-        <p class="text-gray-700 mb-6"><?= htmlspecialchars($product['description']) ?></p>
+<?php include 'navbar.php'; ?>
 
-        <?php if ($product['stock'] > 0): ?>
-          <button class="bg-blue-600 text-white px-6 py-3 rounded-full shadow hover:bg-blue-700 transition">
+<main class="container mx-auto px-20 py-12">
+  <div class="grid lg:grid-cols-2 gap-12 items-start">
+
+    <!-- Product Image -->
+    <div class="w-full flex justify-center items-center">
+      <?php if (!empty($product['image'])): ?>
+        <img 
+          src="<?= '/ministore/admin/page/product/' . htmlspecialchars($product['image']) ?>" 
+          alt="<?= htmlspecialchars($product['name']) ?>" 
+          class="w-90 h-[400px] md:h-[500px] object-cover object-center rounded-3xl transition-transform duration-300 hover:scale-105"
+        >
+      <?php else: ?>
+        <div class="w-80 h-[400px] bg-gray-200 flex items-center justify-center text-gray-500 rounded-3xl">
+          No Image Available
+        </div>
+      <?php endif; ?>
+    </div>
+
+    <!-- Product Details -->
+    <div class="space-y-6 mt-4">
+      <h1 class="text-4xl font-extrabold text-gray-900"><?= htmlspecialchars($product['name']) ?></h1>
+      <p class="text-sm text-gray-500">Category: <span class="capitalize"><?= htmlspecialchars($product['category_name']) ?></span></p>
+      <div class="text-3xl font-bold text-blue-600">$<?= htmlspecialchars(number_format($product['price'], 2)) ?></div>
+      <p class="text-gray-700 leading-relaxed text-base max-w-prose break-words">
+        <?= nl2br(htmlspecialchars($product['description'])) ?>
+      </p>
+
+      <?php if ($product['stock'] > 0): ?>
+        <form class="add-to-cart-form" data-product-id="<?= $product['id'] ?>">
+          <button 
+            type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition duration-300 w-full sm:w-auto">
             Add to Cart
           </button>
-        <?php else: ?>
-          <div class="text-red-500 font-bold">Out of Stock</div>
-        <?php endif; ?>
-      </div>
+        </form>
+      <?php else: ?>
+        <div class="text-red-500 font-semibold text-lg mt-4">Out of Stock</div>
+      <?php endif; ?>
     </div>
-  </main>
+
+  </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll(".add-to-cart-form").forEach((form) => {
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const productId = this.getAttribute("data-product-id");
+      const formData = new FormData();
+      formData.append("product_id", productId);
+      formData.append("quantity", 1);
+
+      try {
+        const response = await fetch("./include/add_to_cart.php", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Added to Cart!",
+            text: result.message,
+            timer: 1500,
+            showConfirmButton: false,
+          });
+
+          const cartCountEl = document.getElementById("cart-count");
+          if (cartCountEl && result.cartCount !== undefined) {
+            cartCountEl.textContent = result.cartCount;
+          }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: result.message,
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Could not add to cart.",
+        });
+      }
+    });
+  });
+});
+</script>
 
 </body>
 </html>

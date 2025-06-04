@@ -41,15 +41,18 @@
     </div>
   </section>
 
-  <!-- Product Grid -->
-  <section class="container mx-auto px-4 py-12">
-    <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      <?php foreach ($products as $product): ?>
-        <?php $categorySlug = strtolower(preg_replace('/\s+/', '', $product['category_name'])); ?>
-        <div class="product-card <?= htmlspecialchars($categorySlug) ?> group bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden transition duration-300 relative">
-          
+    <!-- Product Grid -->
+    <section class="container mx-auto px-16 py-12">
+  
+  <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <?php foreach ($products as $product): ?>
+      <?php $categorySlug = strtolower(preg_replace('/\s+/', '', $product['category_name'])); ?>
+      <div class="product-card <?= htmlspecialchars($categorySlug) ?> group bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden transition duration-300 relative">
+        
+        <!-- Image and Hover Buttons -->
+        <div class="relative">
           <?php if (!empty($product['image'])): ?>
-            <img src="<?= '/ministore/admin/page/product/product_image' . htmlspecialchars($product['image']) ?>" 
+            <img src="<?= '/ministore/admin/page/product/' . htmlspecialchars($product['image']) ?>" 
                  alt="<?= htmlspecialchars($product['name']) ?>" 
                  class="w-full h-52 object-cover">
           <?php else: ?>
@@ -64,47 +67,115 @@
             </div>
           <?php endif; ?>
 
-          <div class="p-5 relative">
-            <h3 class="text-lg font-semibold mb-1"><?= htmlspecialchars($product['name']) ?></h3>
-            <p class="text-gray-500 text-sm mb-3 capitalize"><?= htmlspecialchars($product['category_name']) ?></p>
-            <div class="text-blue-600 font-bold text-lg mb-3">$<?= htmlspecialchars(number_format($product['price'], 2)) ?></div>
+          <?php if ($product['stock'] > 0): ?>
+            <!-- Hover buttons inside image -->
+            <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300">
+  <div class="flex gap-3">
+  <form class="add-to-cart-form" data-product-id="<?= $product['id'] ?>">
+      <button type="submit" class="bg-white text-blue-600 px-4 py-2 rounded-full text-sm font-semibold shadow hover:bg-blue-600 hover:text-white transition">
+        Add to Cart
+      </button>
+    </form>
+    <a href="product_detail.php?id=<?= $product['id'] ?>" class="bg-white text-blue-600 px-4 py-2 rounded-full text-sm font-semibold shadow hover:bg-blue-600 hover:text-white transition">
+      View
+    </a>
+  </div>
+</div>
 
-            <?php if ($product['stock'] > 0): ?>
-              <div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                <button class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm shadow-lg hover:bg-blue-700">
-                  Add to Cart
-                </button>
-              </div>
-            <?php endif; ?>
-          </div>
+          <?php endif; ?>
         </div>
-      <?php endforeach; ?>
-    </div>
-  </section>
+
+        <!-- Product Info -->
+        <div class="p-5">
+          <h3 class="text-lg font-semibold mb-1"><?= htmlspecialchars($product['name']) ?></h3>
+          <p class="text-gray-500 text-sm mb-3 capitalize"><?= htmlspecialchars($product['description']) ?></p>
+          <div class="text-blue-600 font-bold text-lg mb-3">$<?= htmlspecialchars(number_format($product['price'], 2)) ?></div>
+        </div>
+      </div>
+    <?php endforeach; ?>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- JS for Filter -->
   <script>
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const productCards = document.querySelectorAll('.product-card');
 
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const filter = button.getAttribute('data-filter');
+document.addEventListener('DOMContentLoaded', () => {
+  // Handle Add to Cart submission
+  document.querySelectorAll(".add-to-cart-form").forEach((form) => {
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-        // Toggle active button styles
-        filterButtons.forEach(btn => btn.classList.remove('bg-blue-600', 'text-white'));
-        button.classList.add('bg-blue-600', 'text-white');
+      const productId = this.getAttribute("data-product-id");
+      const formData = new FormData();
+      formData.append("product_id", productId);
+      formData.append("quantity", 1);
 
-        // Filter products
-        productCards.forEach(card => {
-          if (filter === 'all' || card.classList.contains(filter)) {
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
-          }
+      try {
+        const response = await fetch("./include/add_to_cart.php", {
+          method: "POST",
+          body: formData,
         });
+
+        const result = await response.json();
+
+        if (result.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Added to Cart!",
+            text: result.message,
+            timer: 1500,
+            showConfirmButton: false,
+          });
+
+          // Update cart count
+          const cartCountEl = document.getElementById("cart-count");
+          if (cartCountEl && typeof result.cartCount !== "undefined") {
+            cartCountEl.textContent = result.cartCount;
+          }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: result.message,
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Could not add to cart.",
+        });
+        console.error("Add to cart failed:", error);
+      }
+    });
+  });
+
+  // Filter logic
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const productCards = document.querySelectorAll('.product-card');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.getAttribute('data-filter');
+
+      // Toggle active class
+      filterButtons.forEach(btn => btn.classList.remove('bg-blue-600', 'text-white'));
+      button.classList.add('bg-blue-600', 'text-white');
+
+      // Show/Hide products
+      productCards.forEach(card => {
+        if (filter === 'all' || card.classList.contains(filter)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
       });
     });
+  });
+});
+
   </script>
 </main>
 

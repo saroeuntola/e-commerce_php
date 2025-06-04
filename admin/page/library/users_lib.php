@@ -75,6 +75,17 @@ class User
 
         return dbUpdate('users', $data, "id=" . $this->db->quote($id));
     }
+    public function getUserByID($id)
+{
+    if ($id === null) {
+        return null;
+    }
+
+    $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
+    $stmt->execute([':id' => $id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 
     // DELETE a user
     public function deleteUser($id)

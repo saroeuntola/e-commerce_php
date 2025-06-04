@@ -8,9 +8,7 @@ $brand = new Brand();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $brandName = $_POST['brand_name'];
     $brandLink = $_POST['link'];
-    // $price = $_POST['price'];
-    // $stock = $_POST['stock'];
-    // $categoryId = $_POST['category_id'];
+
 
     // Handle Image Upload
     $imagePath = "";
@@ -49,10 +47,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <!-- Brand Image -->
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Upload Image</label>
-                <input type="file" name="brand_image" accept="image/*" class="w-full px-3 py-2 border rounded-md">
-            </div>
+           <!-- Brand Image with Preview -->
+<div class="mb-4">
+    <label class="block text-sm font-medium text-gray-700">Upload Image</label>
+    <input type="file" name="brand_image" accept="image/*" class="w-full px-3 py-2 border rounded-md" onchange="previewImage(event)">
+    <div class="mt-2">
+        <img id="imagePreview" src="#" alt="Preview" class="w-24 h-24 rounded-full object-cover border mt-2 hidden" />
+    </div>
+</div>
 
             <!-- Link -->
             <div class="mb-4">
@@ -67,4 +69,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
 </body>
+<script>
+function previewImage(event) {
+    const input = event.target;
+    const preview = document.getElementById('imagePreview');
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
 </html>

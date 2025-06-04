@@ -8,6 +8,7 @@ include '../admin/page/library/product_lib.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $productId = intval($_POST['product_id']);
     $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
+    if ($quantity <= 0) $quantity = 1;
 
     $productObj = new Product();
     $product = $productObj->getProductById($productId);
@@ -18,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'name' => $product['name'],
             'price' => $product['price'],
             'image' => $product['image'],
-            'description'=> $product['description'],
+            'description' => $product['description'],
             'quantity' => $quantity,
         ];
 
@@ -39,10 +40,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['cart'][] = $item;
         }
 
-        echo json_encode(['success' => true, 'message' => 'Item added to cart!']);
-        exit;
+        $cartCount = array_sum(array_column($_SESSION['cart'], 'quantity'));
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Item added to cart!',
+            'cartCount' => $cartCount
+        ]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Product not found.']);
-        exit;
+        echo json_encode([
+            'success' => false,
+            'message' => 'Product not found.'
+        ]);
     }
+} else {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid request method.'
+    ]);
 }

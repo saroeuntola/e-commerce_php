@@ -1,24 +1,41 @@
 <?php 
   include "./admin/page/library/product_lib.php";
   include "./admin/page/library/category_lib.php";
-  include "./admin/page/library/db.php";
+  include "./admin/page/library/banner_lib.php";
   $productObj = new Product();
   $categoryObj = new Category();
+  $bannerObj = new Banner();
   $categories = $categoryObj->getCategories();
   $products = $productObj->getProducts();
+  $banners = $bannerObj->getBanner();
 ?>
 
 <main>
+ <!-- Banner Slideshow -->
+<section class="relative w-full h-[400px] overflow-hidden">
+  <div id="slide-container" class="w-full h-full relative">
+    <?php if (!empty($banners)): ?>
+      <img src="<?= '/ministore/admin/page/banner/' . htmlspecialchars($banners[0]['image']) ?>" class="w-full h-full object-cover" id="slide-image">
+    <?php else: ?>
+      <div class="w-full h-full bg-gray-300 flex items-center justify-center text-gray-700 text-lg">
+        No Banner Available
+      </div>
+    <?php endif; ?>
+  </div>
 
-  <!-- Slideshow -->
-  <section class="relative w-full h-[400px] overflow-hidden">
-    <div class="w-full h-full">
-      <img src="https://source.unsplash.com/1600x400/?shopping" alt="Hero" class="w-full h-full object-cover">
-    </div>
-    <div class="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-4xl font-bold">
-      Welcome to MiniStore
-    </div>
-  </section>
+  <!-- Prev Button -->
+  <button id="prevBtn"
+    class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow transition">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+
+  <!-- Next Button -->
+  <button id="nextBtn"
+    class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow transition">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+</section>
+
 
   <!-- Features -->
   <section class="container mx-auto px-4 py-12 text-center">
@@ -62,7 +79,7 @@
   </section>
 
   <!-- Product Grid -->
-  <section class="container mx-auto px-4 py-12">
+  <section class="container mx-auto px-16 py-12">
   <p class="mb-3 text-xl font-semibold">Popular Products</p>
   <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
     <?php foreach ($products as $product): ?>
@@ -72,7 +89,7 @@
         <!-- Image and Hover Buttons -->
         <div class="relative">
           <?php if (!empty($product['image'])): ?>
-            <img src="<?= '/ministore/admin/page/product/product_image/' . htmlspecialchars($product['image']) ?>" 
+            <img src="<?= '/ministore/admin/page/product/' . htmlspecialchars($product['image']) ?>" 
                  alt="<?= htmlspecialchars($product['name']) ?>" 
                  class="w-full h-52 object-cover">
           <?php else: ?>
@@ -166,13 +183,22 @@
           timer: 1500,
           showConfirmButton: false,
         });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops!",
-          text: result.message,
-          timer: 2000,
-        });
+        if (result.success) {
+  Swal.fire({
+    icon: "success",
+    title: "Added to Cart!",
+    text: result.message,
+    timer: 1500,
+    showConfirmButton: false,
+  });
+
+  // ✅ Update cart count dynamically
+  const cartCountEl = document.getElementById("cart-count");
+  if (cartCountEl && result.cartCount !== undefined) {
+    cartCountEl.textContent = result.cartCount;
+  }
+}
+
       }
     } catch (error) {
       Swal.fire({
@@ -183,6 +209,35 @@
     }
   });
 });
+
+
+const banners = <?= json_encode(array_column($banners, 'image')) ?>;
+  const slideImage = document.getElementById("slide-image");
+
+  let currentIndex = 0;
+
+  function showSlide(index) {
+    if (banners.length === 0) return;
+    slideImage.src = "/ministore/admin/page/banner/" + banners[index];
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % banners.length;
+    showSlide(currentIndex);
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + banners.length) % banners.length;
+    showSlide(currentIndex);
+  }
+
+  document.getElementById("nextBtn").addEventListener("click", nextSlide);
+  document.getElementById("prevBtn").addEventListener("click", prevSlide);
+
+  // Auto slide every 5 seconds
+  setInterval(nextSlide, 5000);
+
+
 
 </script>
 

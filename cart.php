@@ -20,7 +20,7 @@ $cart = $_SESSION['cart'] ?? [];
       <div class="space-y-6">
         <?php foreach ($cart as $index => $item): ?>
           <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-4 border-b pb-4">
-            <img src="<?= '/ministore/admin/page/product/product_image/' . htmlspecialchars($item['image']) ?>" 
+            <img src="<?= '/ministore/admin/page/product/' . htmlspecialchars($item['image']) ?>" 
                  alt="<?= htmlspecialchars($item['name']) ?>" 
                  class="w-24 h-24 object-cover rounded-lg border">
 
